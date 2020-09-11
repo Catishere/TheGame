@@ -41,7 +41,7 @@ FORMS += \
     mainwindow.ui
 
 TRANSLATIONS += \
-    TheGame2_bg_BG.ts
+    TheGame_bg_BG.ts
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
