@@ -11,8 +11,9 @@
 #include <render.h>
 #include <QList>
 
-class ControlsHandler
+class ControlsHandler : public QObject
 {
+    Q_OBJECT
 
 public:
     ControlsHandler();
@@ -25,10 +26,12 @@ public:
     QList<Wall> getWalls() const;
     void setWalls(const QList<Wall> &value);
 
+signals:
+    void collision(const Wall *wall);
+
 private:
     Player *player;
     QList<Wall> walls;
-    CollisionHandler collisionHandler;
     Render render;
     bool forward;
     bool backward;

@@ -16,6 +16,25 @@ MainWindow::MainWindow(QWidget *parent)
     controls = new ControlsHandler();
     distance = 0.0f;
     spin = 0.0f;
+    upperLeft.xOffset = -0.75f;
+    upperLeft.yOffset = 0.75f;
+    upperLeft.scale = 0.75f;
+
+    upperRight.xOffset = 0.75f;
+    upperRight.yOffset = 0.75f;
+    upperRight.scale = 0.75f;
+
+    lowerLeft.xOffset = -0.75f;
+    lowerLeft.yOffset = -0.75f;
+    lowerLeft.scale = 0.75f;
+
+    lowerRight.xOffset = 0.75f;
+    lowerRight.yOffset = -0.75f;
+    lowerRight.scale = 0.75f;
+
+    center.xOffset = 0.0f;
+    center.yOffset = 0.0f;
+    center.scale = 1.0f;
 }
 
 MainWindow::~MainWindow()
@@ -51,7 +70,6 @@ void MainWindow::paintGL()
 {
     RenderedPoint * rp = controls->calculatePositionOffset().getPoints();
     Player *p = controls->getPlayer();
-
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -64,18 +82,19 @@ void MainWindow::paintGL()
     float rightHalfCos = 0.5f * qCos(ploriRad + qDegreesToRadians(30.0f));
     float rightHalfSin = 0.5f * qSin(ploriRad + qDegreesToRadians(30.0f));
 
-    glVertex2f(0.0, 0.0);
-    glVertex2f(leftHalfCos, leftHalfSin);
+    glVertex2fScaled(0.0, 0.0, center);
+    glVertex2fScaled(leftHalfCos, leftHalfSin, center);
 
-    glVertex2f(leftHalfCos, leftHalfSin);
-    glVertex2f(rightHalfCos, rightHalfSin);
+    glVertex2fScaled(leftHalfCos, leftHalfSin, center);
+    glVertex2fScaled(rightHalfCos, rightHalfSin, center);
 
-    glVertex2f(rightHalfCos, rightHalfSin);
-    glVertex2f(0.0, 0.0);
+    glVertex2fScaled(rightHalfCos, rightHalfSin, center);
+    glVertex2fScaled(0.0, 0.0, center);
 
     Wall wall;
     foreach (wall, controls->getWalls()) {
-
+        if (!wall.getVisible())
+            continue;
         // render
         const QVector3D *v = wall.voxels;
         float p1xdelta = v[2].x() - p->getPosition().x();
@@ -89,8 +108,8 @@ void MainWindow::paintGL()
         float p2x = p2xdelta / 200;
         float p2y = p2ydelta / 200;
 
-        glVertex2f(p1x, p1y);
-        glVertex2f(p2x, p2y);
+        glVertex2fScaled(p1x, p1y, center);
+        glVertex2fScaled(p2x, p2y, center);
     }
 
     glEnd();
@@ -106,6 +125,12 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 {
 }
 
+void MainWindow::glVertex2fScaled(GLfloat x, GLfloat y, scrPos scrpos)
+{
+    glVertex2f(x * scrpos.scale + scrpos.xOffset,
+               y * scrpos.scale + scrpos.yOffset);
+}
+
 void MainWindow::paintCentralCircle()
 {
     glBegin(GL_LINE_LOOP);
@@ -114,7 +139,7 @@ void MainWindow::paintCentralCircle()
              double angle = 2 * M_PI * i / 300;
              double x = qCos(angle)/ 200;
              double y = qSin(angle)/ 200;
-             glVertex2d(x,y);
+             glVertex2fScaled(x, y, center);
          }
     glEnd();
 }

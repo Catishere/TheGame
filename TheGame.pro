@@ -35,6 +35,7 @@ HEADERS += \
     render.h \
     renderedpoint.h \
     renderedwall.h \
+    screenposition.h \
     wall.h
 
 FORMS += \

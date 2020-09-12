@@ -11,12 +11,17 @@ ControlsHandler::ControlsHandler(){
     walls.append(Wall(QVector3D(0, 100, 100),
                       QVector3D(0, 200, 100),
                       QVector3D(0, 200, 0),
-                      QVector3D(0, 100, 0)));
-
+                      QVector3D(0, 100, 0), true));
     walls.append(Wall(QVector3D(0, 200, 100),
                       QVector3D(100, 200, 100),
                       QVector3D(100, 200, 0),
-                      QVector3D(0, 200, 0)));
+                      QVector3D(0, 200, 0), true));
+    walls.append(Wall(QVector3D(100, 200, 100),
+                      QVector3D(100, 300, 100),
+                      QVector3D(100, 300, 0),
+                      QVector3D(100, 200, 0), false));
+    QObject::connect(this, &ControlsHandler::collision,
+                     player, &Player::collisionSlot);
 }
 
 void ControlsHandler::handleKeyEvent(QKeyEvent *keyEvent, bool mode)
@@ -55,7 +60,7 @@ void ControlsHandler::handleKeyEvent(QKeyEvent *keyEvent, bool mode)
 
 RenderedWall ControlsHandler::calculatePositionOffset()
 {
-    QVector3D oldPos = player->getPosition();
+    player->setOldPosition(player->getPosition());
 
     if (forward + backward + left + right >= 2)
         player->setSpeed(HALF_SPEED);
@@ -80,12 +85,9 @@ RenderedWall ControlsHandler::calculatePositionOffset()
 
     foreach (const Wall &wall, walls)
     {
-        if (collisionHandler.distanceToWall(player->getPosition(), &wall) < 2.0f)
+        if (CollisionHandler::distanceToWall(player->getPosition(),&wall) < 2.0f)
         {
-            player->setPosition(oldPos);
-//            float wo = wall.getOrientation();
-//            float po = player->getOrientation();
-//            player->moveHeadingAbsolute(wo, -qSin(po));
+            emit collision(&wall);
         }
     }
 

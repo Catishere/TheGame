@@ -8,7 +8,7 @@ class CollisionHandler
 {
 public:
     CollisionHandler();
-    float distanceToWall(const QVector3D player, const Wall *wall);
+    static float distanceToWall(const QVector3D player, const Wall *wall);
 };
 
 #endif // COLLISIONHANDLER_H

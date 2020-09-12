@@ -10,6 +10,7 @@
 #include <QOpenGLFunctions>
 #include <QtOpenGL>
 #include <GL/gl.h>
+#include "screenposition.h"
 #include <controlshandler.h>
 #include <QTimer>
 
@@ -37,6 +38,7 @@ protected:
 
     void resizeEvent(QResizeEvent *event);
 
+    void glVertex2fScaled(GLfloat x, GLfloat y, scrPos scrpos);
     void paintCentralCircle();
     void paintInfo(Player *p);
 
@@ -46,6 +48,7 @@ private:
     QOpenGLContext *context;
     QOpenGLFunctions *openGLFunctions;
     ControlsHandler *controls;
+    scrPos upperLeft, upperRight, lowerLeft, lowerRight, center;
     float distance;
     float spin;
 };

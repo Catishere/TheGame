@@ -7,15 +7,23 @@
 #define WALK_SPEED 0.3f
 
 #include <QVector3D>
+#include <QObject>
 #include <QDebug>
 #include <QtMath>
+#include "wall.h"
+#include "collisionhandler.h"
 
-class Player
+class Player : public QObject
 {
+    Q_OBJECT
+
     QVector3D position;
     float orientation;
+    float direction;
     float speed;
     float speedModifier;
+    QVector3D oldPosition;
+    int collision = -1;
 
 public:
     Player(QVector3D position);
@@ -24,7 +32,7 @@ public:
     void setPosition(QVector3D position);
     void setOrientation(float orientation);
     void moveHeading(float degrees);
-    void moveHeadingAbsolute(float degrees, float speedFactor);
+    void moveHeadingInner(float degrees, float speedFactor, bool relative);
     void moveForward();
     void moveBackward();
     void moveLeft();
@@ -35,6 +43,12 @@ public:
     void setSpeed(float speed);
     float getSpeedModifier() const;
     void setSpeedModifier(float value);
+
+    QVector3D getOldPosition() const;
+    void setOldPosition(const QVector3D &value);
+
+public slots:
+    void collisionSlot(const Wall *wall);
 };
 
 #endif // PLAYER_H
