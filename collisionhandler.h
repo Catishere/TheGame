@@ -10,7 +10,7 @@ class CollisionHandler
 {
 public:
     CollisionHandler();
-    static float distanceToWall(Player *player, const Wall *wall);
+    static float distanceToWall(const Player *player, const Wall *wall);
 };
 
 #endif // COLLISIONHANDLER_H

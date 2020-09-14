@@ -5,7 +5,7 @@ CollisionHandler::CollisionHandler()
 
 }
 
-float CollisionHandler::distanceToWall(Player *player, const Wall *wall)
+float CollisionHandler::distanceToWall(const Player *player, const Wall *wall)
 {
     QVector3D pos = player->getPosition();
     float distanceP1 = pos.distanceToPoint(wall->voxels[2]);

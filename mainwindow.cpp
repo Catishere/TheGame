@@ -73,49 +73,15 @@ void MainWindow::paintGL()
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    paint3DWalls(p);
     glBegin(GL_LINES);
 
-    float ploriRad = qDegreesToRadians(p->getOrientation());
-    float leftHalfCos = 0.5f * qCos(ploriRad - qDegreesToRadians(30.0f));
-    float leftHalfSin = 0.5f * qSin(ploriRad - qDegreesToRadians(30.0f));
-
-    float rightHalfCos = 0.5f * qCos(ploriRad + qDegreesToRadians(30.0f));
-    float rightHalfSin = 0.5f * qSin(ploriRad + qDegreesToRadians(30.0f));
-
-    glVertex2fScaled(0.0, 0.0, center);
-    glVertex2fScaled(leftHalfCos, leftHalfSin, center);
-
-    glVertex2fScaled(leftHalfCos, leftHalfSin, center);
-    glVertex2fScaled(rightHalfCos, rightHalfSin, center);
-
-    glVertex2fScaled(rightHalfCos, rightHalfSin, center);
-    glVertex2fScaled(0.0, 0.0, center);
-
-    Wall wall;
-    foreach (wall, controls->getWalls()) {
-        if (!wall.getVisible())
-            continue;
-        // render
-        const QVector3D *v = wall.voxels;
-        float p1xdelta = v[2].x() - p->getPosition().x();
-        float p1ydelta = v[2].y() - p->getPosition().y();
-
-        float p2xdelta = v[3].x() - p->getPosition().x();
-        float p2ydelta = v[3].y() - p->getPosition().y();
-
-        float p1x = p1xdelta / 200;
-        float p1y = p1ydelta / 200;
-        float p2x = p2xdelta / 200;
-        float p2y = p2ydelta / 200;
-
-        glVertex2fScaled(p1x, p1y, center);
-        glVertex2fScaled(p2x, p2y, center);
-    }
-
-    glEnd();
+    paintFOVLimit(p);
+    paintWalls(p);
 
     paintCentralCircle();
     paintInfo(p);
+    glEnd();
 
     glFlush();
     this->update();
@@ -139,12 +105,12 @@ void MainWindow::paintCentralCircle()
              double angle = 2 * M_PI * i / 300;
              double x = qCos(angle)/ 200;
              double y = qSin(angle)/ 200;
-             glVertex2fScaled(x, y, center);
+             glVertex2fScaled(x, y, upperRight);
          }
     glEnd();
 }
 
-void MainWindow::paintInfo(Player *p)
+void MainWindow::paintInfo(const Player *p)
 {
     QVector3D pos = p->getPosition();
     QString str = QString("X: %1, Y: %2, Z: %3, Angle: %4")
@@ -159,6 +125,86 @@ void MainWindow::paintInfo(Player *p)
     painter.drawText(0, 0, width(), height()
                      , Qt::AlignTop, str);
     painter.end();
+}
+
+void MainWindow::paintWalls(const Player *p)
+{
+    QVector3D playerPos = p->getPosition();
+    Wall wall;
+    foreach (wall, controls->getWalls()) {
+        if (!wall.getVisible())
+            continue;
+        // render
+        const QVector3D *v = wall.voxels;
+        float p1xdelta = v[2].x() - playerPos.x();
+        float p1ydelta = v[2].y() - playerPos.y();
+
+        float p2xdelta = v[3].x() - playerPos.x();
+        float p2ydelta = v[3].y() - playerPos.y();
+
+        float p1x = p1xdelta / 200;
+        float p1y = p1ydelta / 200;
+        float p2x = p2xdelta / 200;
+        float p2y = p2ydelta / 200;
+
+        glVertex2fScaled(p1x, p1y, upperRight);
+        glVertex2fScaled(p2x, p2y, upperRight);
+    }
+}
+
+void MainWindow::paint3DWalls(const Player *p)
+{
+    QVector3D playerPos = p->getPosition();
+    float playerOri = p->getOrientation();
+    float halfFOV = p->getFOV() / 2;
+
+    Wall wall;
+    foreach (wall, controls->getWalls()) {
+        float distance = CollisionHandler::distanceToWall(p, &wall);
+        float color = 1 - distance / 255.0f;
+
+        if (!wall.getVisible())
+            continue;
+        // render
+        glColor3f(color, color, color);
+        glBegin(GL_QUADS);
+        const QVector3D *v = wall.voxels;
+        for (int i = 0; i < 4; ++i) {
+            float deltax = v[i].x() - playerPos.x();
+            float deltay = v[i].y() - playerPos.y();
+            float deltaz = v[i].z() - playerPos.z();
+            float absoluteAngle = qRadiansToDegrees(qAtan2(deltay, deltax));
+            float absoluteAngleVert = qRadiansToDegrees(qAtan2(deltaz, deltay));
+            float relativeAngle = absoluteAngle - playerOri;
+            glVertex2f(-relativeAngle / halfFOV, absoluteAngleVert / halfFOV);
+        }
+
+        glEnd();
+        glColor3f(1, 1, 1);
+    }
+
+}
+
+void MainWindow::paintFOVLimit(const Player *p)
+{
+    glColor3f(1.0f, 0.0f, 0.0f);
+    float halfFOV = p->getFOV()/2;
+    float ploriRad = qDegreesToRadians(p->getOrientation());
+    float leftHalfCos = 0.5f * qCos(ploriRad - qDegreesToRadians(halfFOV));
+    float leftHalfSin = 0.5f * qSin(ploriRad - qDegreesToRadians(halfFOV));
+
+    float rightHalfCos = 0.5f * qCos(ploriRad + qDegreesToRadians(halfFOV));
+    float rightHalfSin = 0.5f * qSin(ploriRad + qDegreesToRadians(halfFOV));
+
+    glVertex2fScaled(0.0, 0.0, upperRight);
+    glVertex2fScaled(leftHalfCos, leftHalfSin, upperRight);
+
+    glVertex2fScaled(leftHalfCos, leftHalfSin, upperRight);
+    glVertex2fScaled(rightHalfCos, rightHalfSin, upperRight);
+
+    glVertex2fScaled(rightHalfCos, rightHalfSin, upperRight);
+    glVertex2fScaled(0.0, 0.0, upperRight);
+    glColor3f(1, 1, 1);
 }
 
 void MainWindow::paintEvent(QPaintEvent *event)

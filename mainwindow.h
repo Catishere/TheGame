@@ -40,8 +40,10 @@ protected:
 
     void glVertex2fScaled(GLfloat x, GLfloat y, scrPos scrpos);
     void paintCentralCircle();
-    void paintInfo(Player *p);
-
+    void paintInfo(const Player *p);
+    void paintWalls(const Player *p);
+    void paint3DWalls(const Player *p);
+    void paintFOVLimit(const Player *p);
     void paintEvent(QPaintEvent *event);
 
 private:

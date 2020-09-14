@@ -7,7 +7,7 @@ ControlsHandler::ControlsHandler(){
     right = RELEASE_MODE;
     lookLeft = RELEASE_MODE;
     lookRight = RELEASE_MODE;
-    player = new Player(QVector3D(10, 10, 0));
+    player = new Player(QVector3D(10, 10, 50));
     populateWalls(walls);
     QObject::connect(this, &ControlsHandler::collision,
                      player, &Player::collisionSlot);
@@ -50,6 +50,7 @@ void ControlsHandler::handleKeyEvent(QKeyEvent *keyEvent, bool mode)
 RenderedWall ControlsHandler::calculatePositionOffset()
 {
     player->setOldPosition(player->getPosition());
+    float criticalDistance = 50.1f;
 
     if (forward + backward + left + right >= 2)
         player->setSpeed(HALF_SPEED);
@@ -76,7 +77,7 @@ RenderedWall ControlsHandler::calculatePositionOffset()
     {
       float distance = CollisionHandler::distanceToWall(player,
                                                         &wall);
-      if (distance < 2.0f)
+      if (distance < criticalDistance)
       {
         qDebug() << wall.getId() << wall.getOrientation();
         emit collision(&wall);

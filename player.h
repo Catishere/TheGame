@@ -21,6 +21,7 @@ class Player : public QObject
     float direction;
     float speed;
     float speedModifier;
+    float FOV;
     QVector3D oldPosition;
     int collision = -1;
 
@@ -45,6 +46,9 @@ public:
 
     QVector3D getOldPosition() const;
     void setOldPosition(const QVector3D &value);
+
+    float getFOV() const;
+    void setFOV(float value);
 
 public slots:
     void collisionSlot(const Wall *wall);

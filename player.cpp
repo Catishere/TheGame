@@ -10,12 +10,23 @@ void Player::setOldPosition(const QVector3D &value)
     oldPosition = value;
 }
 
+float Player::getFOV() const
+{
+    return FOV;
+}
+
+void Player::setFOV(float value)
+{
+    FOV = value;
+}
+
 Player::Player(QVector3D position)
 {
     this->position = position;
     orientation = 90.0f;
     speed = FULL_SPEED;
     speedModifier = FULL_SPEED;
+    FOV = 60.0f;
 }
 
 float Player::getSpeedModifier() const
