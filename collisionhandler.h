@@ -3,12 +3,14 @@
 
 #include <QVector3D>
 #include "wall.h"
+#include "player.h"
+#include <QtDebug>
 
 class CollisionHandler
 {
 public:
     CollisionHandler();
-    static float distanceToWall(const QVector3D player, const Wall *wall);
+    static float distanceToWall(Player *player, const Wall *wall);
 };
 
 #endif // COLLISIONHANDLER_H

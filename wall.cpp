@@ -2,11 +2,24 @@
 
 int Wall::count = 0;
 
-Wall::Wall()
+bool Wall::getGhost() const
 {
+    return ghost;
 }
 
-Wall::Wall(QVector3D a, QVector3D b, QVector3D c, QVector3D d, bool visible)
+void Wall::setGhost(bool value)
+{
+    ghost = value;
+}
+
+Wall::Wall(){}
+
+Wall::Wall(QVector3D a, QVector3D b)
+{
+    *this = Wall(a, b, a, b);
+}
+
+Wall::Wall(QVector3D a, QVector3D b, QVector3D c, QVector3D d)
 {
     voxels[0] = a;
     voxels[1] = b;
@@ -15,12 +28,13 @@ Wall::Wall(QVector3D a, QVector3D b, QVector3D c, QVector3D d, bool visible)
 
     count++;
     id = count;
-    this->visible = visible;
     float deltaY = (voxels[0].y() - voxels[1].y());
-    float deltaX = (voxels[1].x() - voxels[0].x());
+    float deltaX = (voxels[0].x() - voxels[1].x());
     float result = qRadiansToDegrees(qAtan2(deltaY, deltaX));
     orientation = (result < 0) ? (360.0f + result) : result;
     distance = voxels[0].distanceToPoint(voxels[1]);
+    ghost = false;
+    visible = true;
 }
 
 bool Wall::getVisible() const

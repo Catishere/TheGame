@@ -11,7 +11,6 @@
 #include <QDebug>
 #include <QtMath>
 #include "wall.h"
-#include "collisionhandler.h"
 
 class Player : public QObject
 {

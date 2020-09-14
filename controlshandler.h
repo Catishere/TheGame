@@ -39,6 +39,8 @@ private:
     bool right;
     bool lookLeft;
     bool lookRight;
+
+    void populateWalls(QList<Wall> &walls);
 };
 
 #endif // CONTROLS_H

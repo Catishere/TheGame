@@ -8,18 +8,7 @@ ControlsHandler::ControlsHandler(){
     lookLeft = RELEASE_MODE;
     lookRight = RELEASE_MODE;
     player = new Player(QVector3D(10, 10, 0));
-    walls.append(Wall(QVector3D(0, 100, 100),
-                      QVector3D(0, 200, 100),
-                      QVector3D(0, 200, 0),
-                      QVector3D(0, 100, 0), true));
-    walls.append(Wall(QVector3D(0, 200, 100),
-                      QVector3D(100, 200, 100),
-                      QVector3D(100, 200, 0),
-                      QVector3D(0, 200, 0), true));
-    walls.append(Wall(QVector3D(100, 200, 100),
-                      QVector3D(100, 300, 100),
-                      QVector3D(100, 300, 0),
-                      QVector3D(100, 200, 0), false));
+    populateWalls(walls);
     QObject::connect(this, &ControlsHandler::collision,
                      player, &Player::collisionSlot);
 }
@@ -85,10 +74,13 @@ RenderedWall ControlsHandler::calculatePositionOffset()
 
     foreach (const Wall &wall, walls)
     {
-        if (CollisionHandler::distanceToWall(player->getPosition(),&wall) < 2.0f)
-        {
-            emit collision(&wall);
-        }
+      float distance = CollisionHandler::distanceToWall(player,
+                                                        &wall);
+      if (distance < 2.0f)
+      {
+        qDebug() << wall.getId() << wall.getOrientation();
+        emit collision(&wall);
+      }
     }
 
     return render.renderWall(player, &(walls.at(0)));
@@ -112,4 +104,68 @@ QList<Wall> ControlsHandler::getWalls() const
 void ControlsHandler::setWalls(const QList<Wall> &value)
 {
     this->walls = value;
+}
+
+void ControlsHandler::populateWalls(QList<Wall> &walls)
+{
+
+    walls.append(Wall(QVector3D(0, 100, 100),
+                      QVector3D(0, 200, 100),
+                      QVector3D(0, 200, 0),
+                      QVector3D(0, 100, 0)));
+    walls.append(Wall(QVector3D(0, 200, 100),
+                      QVector3D(100, 200, 100),
+                      QVector3D(100, 200, 0),
+                      QVector3D(0, 200, 0)));
+    walls.append(Wall(QVector3D(100, 200, 100),
+                      QVector3D(200, 300, 100),
+                      QVector3D(200, 300, 0),
+                      QVector3D(100, 200, 0)));
+
+    LINE(walls, 300, 300, 310, 300);
+    LINE(walls, 310, 300, 320, 305);
+    LINE(walls, 320, 305, 320, 340);
+
+    LINE(walls, 300, 350, 330, 370);
+    walls.last().setGhost(true);
+
+    LINE(walls, 330, 420, 330, 370);
+    LINE(walls, 340, 420, 330, 420);
+    LINE(walls, 340, 410, 340, 420);
+    LINE(walls, 370, 410, 340, 410);
+    LINE(walls, 370, 420, 370, 410);
+    LINE(walls, 380, 420, 370, 420);
+    LINE(walls, 380, 370, 380, 420);
+    LINE(walls, 350, 350, 380, 370);
+
+    LINE(walls, 310, 300, 310, 340);
+    LINE(walls, 310, 340, 340, 340);
+    LINE(walls, 340, 340, 340, 300);
+    LINE(walls, 340, 300, 350, 300);
+    LINE(walls, 350, 300, 350, 350);
+    LINE(walls, 350, 350, 300, 350);
+    LINE(walls, 300, 350, 300, 300);
+
+
+    LINE(walls, 330, 370, 380, 370);
+
+    LINE(walls, 380, 420, 390, 415);
+    LINE(walls, 390, 415, 390, 325);
+    LINE(walls, 390, 325, 380, 320);
+    LINE(walls, 380, 320, 370, 320);
+    LINE(walls, 370, 320, 370, 346);
+
+
+    LINE(walls, 350, 300, 360, 305);
+    LINE(walls, 360, 305, 360, 340);
+    LINE(walls, 360, 340, 380, 352);
+    LINE(walls, 380, 352, 380, 320);
+
+
+    LINE(walls, 340, 420, 350, 415);
+    LINE(walls, 350, 415, 350, 410);
+
+    LINE(walls, 330, 340, 330, 320);
+    LINE(walls, 330, 320, 340, 320);
+
 }

@@ -13,9 +13,9 @@ void Player::setOldPosition(const QVector3D &value)
 Player::Player(QVector3D position)
 {
     this->position = position;
-    this->orientation = 90.0f;
-    this->speed = FULL_SPEED;
-    this->speedModifier = FULL_SPEED;
+    orientation = 90.0f;
+    speed = FULL_SPEED;
+    speedModifier = FULL_SPEED;
 }
 
 float Player::getSpeedModifier() const
@@ -30,6 +30,9 @@ void Player::setSpeedModifier(float value)
 
 void Player::collisionSlot(const Wall *wall)
 {
+    if (wall->getGhost())
+        return;
+
     position = oldPosition;
     float wo = wall->getOrientation();
     float po = orientation + direction;
@@ -37,7 +40,8 @@ void Player::collisionSlot(const Wall *wall)
     if (wall->getId() == collision)
         moveHeadingInner(wo, qCos(qDegreesToRadians(wo - po)), false);
 
-    collision = wall->getId();
+    if (!wall->getGhost())
+        collision = wall->getId();
 }
 
 QVector3D Player::getPosition() const
