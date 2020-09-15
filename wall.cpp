@@ -12,6 +12,16 @@ void Wall::setGhost(bool value)
     ghost = value;
 }
 
+Color Wall::getColor() const
+{
+    return color;
+}
+
+void Wall::setColor(const Color &value)
+{
+    color = value;
+}
+
 Wall::Wall(){}
 
 Wall::Wall(QVector3D a, QVector3D b)
@@ -35,6 +45,7 @@ Wall::Wall(QVector3D a, QVector3D b, QVector3D c, QVector3D d)
     distance = voxels[0].distanceToPoint(voxels[1]);
     ghost = false;
     visible = true;
+    color = Color(1.0f, 1.0f, 1.0f);
 }
 
 bool Wall::getVisible() const

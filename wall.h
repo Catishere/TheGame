@@ -6,7 +6,7 @@
 
 #include <QVector3D>
 #include <QtMath>
-
+#include "color.h"
 
 class Wall
 {
@@ -15,6 +15,8 @@ class Wall
     int id;
     bool visible;
     bool ghost;
+    Color color;
+
     static int count;
 public:
     Wall();
@@ -29,6 +31,8 @@ public:
     void setVisible(bool value);
     bool getGhost() const;
     void setGhost(bool value);
+    Color getColor() const;
+    void setColor(const Color &value);
 };
 
 #endif // WALL_H

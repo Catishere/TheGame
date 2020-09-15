@@ -120,6 +120,37 @@ void ControlsHandler::populateWalls(QList<Wall> &walls)
                       QVector3D(200, 300, 100),
                       QVector3D(200, 300, 0),
                       QVector3D(100, 200, 0)));
+    // start box
+    walls.append(Wall(QVector3D(25, 25, 25),
+                      QVector3D(25, 75, 25),
+                      QVector3D(25, 75, 0),
+                      QVector3D(25, 25, 0)));
+    walls.last().setColor(Color(0.7, 0.0f, 0.0f));
+
+    walls.append(Wall(QVector3D(25, 25, 25),
+                      QVector3D(75, 25, 25),
+                      QVector3D(75, 25, 0),
+                      QVector3D(25, 25, 0)));
+    walls.last().setColor(Color(0.7, 0.0f, 0.0f));
+
+    walls.append(Wall(QVector3D(75, 75, 25),
+                      QVector3D(75, 25, 25),
+                      QVector3D(75, 25, 0),
+                      QVector3D(75, 75, 0)));
+    walls.last().setColor(Color(0.7, 0.0f, 0.0f));
+
+    walls.append(Wall(QVector3D(75, 75, 25),
+                      QVector3D(25, 75, 25),
+                      QVector3D(25, 75, 0),
+                      QVector3D(75, 75, 0)));
+    walls.last().setColor(Color(0.7, 0.0f, 0.0f));
+
+    walls.append(Wall(QVector3D(25, 25, 25),
+                      QVector3D(25, 75, 25),
+                      QVector3D(75, 75, 25),
+                      QVector3D(75, 25, 25)));
+    walls.last().setColor(Color(0.7, 0.0f, 0.0f));
+    walls.last().setGhost(true);
 
     LINE(walls, 300, 300, 310, 300);
     LINE(walls, 310, 300, 320, 305);

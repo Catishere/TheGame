@@ -92,11 +92,12 @@ void Render::paint3DWalls()
     foreach (wall, controls->getWalls()) {
         float distance = CollisionHandler::distanceToWall(p, &wall);
         float color = 1 - distance / 655.0f;
-
         if (!wall.getVisible())
             continue;
+
+        Color wc = wall.getColor();
         // render
-        glColor3f(color, color, color);
+        glColor3f(color * wc.getRed(), color * wc.getBlue(), color * wc.getBlue());
         glBegin(GL_QUADS);
         const QVector3D *v = wall.voxels;
         for (int i = 0; i < 4; ++i) {

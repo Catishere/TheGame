@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     collisionhandler.cpp \
+    color.cpp \
     controlshandler.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -29,6 +30,7 @@ SOURCES += \
 
 HEADERS += \
     collisionhandler.h \
+    color.h \
     controlshandler.h \
     mainwindow.h \
     player.h \
