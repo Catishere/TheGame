@@ -47,7 +47,7 @@ void ControlsHandler::handleKeyEvent(QKeyEvent *keyEvent, bool mode)
     }
 }
 
-RenderedWall ControlsHandler::calculatePositionOffset()
+void ControlsHandler::movePlayer()
 {
     player->setOldPosition(player->getPosition());
     float criticalDistance = 50.1f;
@@ -83,8 +83,6 @@ RenderedWall ControlsHandler::calculatePositionOffset()
         emit collision(&wall);
       }
     }
-
-    return render.renderWall(player, &(walls.at(0)));
 }
 
 Player *ControlsHandler::getPlayer() const

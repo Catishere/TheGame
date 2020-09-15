@@ -8,7 +8,6 @@
 #include "player.h"
 #include "wall.h"
 #include <collisionhandler.h>
-#include <render.h>
 #include <QList>
 
 class ControlsHandler : public QObject
@@ -18,7 +17,7 @@ class ControlsHandler : public QObject
 public:
     ControlsHandler();
     void handleKeyEvent(QKeyEvent *keyEvent, bool mode);
-    RenderedWall calculatePositionOffset();
+    void movePlayer();
 
     Player *getPlayer() const;
     void setPlayer(Player *value);
@@ -32,7 +31,6 @@ signals:
 private:
     Player *player;
     QList<Wall> walls;
-    Render render;
     bool forward;
     bool backward;
     bool left;

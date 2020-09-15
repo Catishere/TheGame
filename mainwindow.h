@@ -10,8 +10,9 @@
 #include <QOpenGLFunctions>
 #include <QtOpenGL>
 #include <GL/gl.h>
+#include "render.h"
 #include "screenposition.h"
-#include <controlshandler.h>
+#include "controlshandler.h"
 #include <QTimer>
 
 class MainWindow : public QOpenGLWindow
@@ -36,22 +37,16 @@ protected:
 
     virtual void paintGL();
 
+    void paintInfo(Player *p);
+
     void resizeEvent(QResizeEvent *event);
 
-    void glVertex2fScaled(GLfloat x, GLfloat y, scrPos scrpos);
-    void paintCentralCircle();
-    void paintInfo(const Player *p);
-    void paintWalls(const Player *p);
-    void paint3DWalls(const Player *p);
-    void paintFOVLimit(const Player *p);
     void paintEvent(QPaintEvent *event);
 
 private:
     QOpenGLContext *context;
     QOpenGLFunctions *openGLFunctions;
     ControlsHandler *controls;
-    scrPos upperLeft, upperRight, lowerLeft, lowerRight, center;
-    float distance;
-    float spin;
+    Render *render;
 };
 #endif // MAINWINDOW_H

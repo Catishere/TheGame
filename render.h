@@ -1,22 +1,31 @@
 #ifndef RENDER_H
 #define RENDER_H
 
-#include <player.h>
-#include <wall.h>
-#include <renderedwall.h>
-#include <renderedpoint.h>
-#include <QtMath>
-#include <QVector3D>
+#include <GL/gl.h>
+#include <QtOpenGL>
+#include "screenposition.h"
+#include "collisionhandler.h"
+#include "controlshandler.h"
+#include "player.h"
 
 class Render
 {
-    const float VFOV = 0.785398;
-    const float HFOV = 1.309;
+    scrPos upperLeft;
+    scrPos upperRight;
+    scrPos lowerLeft;
+    scrPos lowerRight;
+    scrPos center;
+    Player *p;
+    ControlsHandler *controls;
 
 public:
-    Render();
-    RenderedWall renderWall(const Player *player, const Wall *wall);
-    RenderedPoint renderPoint(const Player *player, const QVector3D *point) const;
+    Render(ControlsHandler *controls);
+    void glVertex2fScaled(GLfloat x, GLfloat y, scrPos scrpos);
+    void paintCentralCircle();
+    void paintInfo();
+    void paintWalls();
+    void paint3DWalls();
+    void paintFOVLimit();
 };
 
 #endif // RENDER_H
