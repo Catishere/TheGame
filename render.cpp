@@ -106,7 +106,7 @@ void Render::paint3DWalls()
             float deltaxy = qSqrt(deltax * deltax + deltay * deltay);
             float absoluteAngle = qRadiansToDegrees(qAtan2(deltay, deltax));
             float absoluteAngleVert = qRadiansToDegrees(qAtan2(deltaz,deltaxy));
-            float relativeAngle = absoluteAngle - playerOri;
+            float relativeAngle = normalizeAngle(absoluteAngle - playerOri);
             glVertex2f(-relativeAngle / halfFOV, absoluteAngleVert / halfVFOV);
         }
 
@@ -136,4 +136,13 @@ void Render::paintFOVLimit()
     glVertex2fScaled(rightHalfCos, rightHalfSin, upperRight);
     glVertex2fScaled(0.0, 0.0, upperRight);
     glColor3f(1, 1, 1);
+}
+
+float Render::normalizeAngle(float angle)
+{
+    if (angle > 180.0f)
+        return angle - 360;
+    else if (angle < -180.0f)
+        return 360 + angle;
+    else return angle;
 }

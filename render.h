@@ -18,7 +18,7 @@ class Render
     Player *p;
     ControlsHandler *controls;
     float FOV = 60.0f; // horizontal FOV
-    float VFOV = 155.0f; // vertical FOV
+    float VFOV = 60.0f; // vertical FOV
 
 public:
     Render(ControlsHandler *controls);
@@ -28,6 +28,7 @@ public:
     void paintWalls();
     void paint3DWalls();
     void paintFOVLimit();
+    inline float normalizeAngle(float angle);
     float getFOV() const;
     void setFOV(float value);
 };
