@@ -7,7 +7,7 @@ ControlsHandler::ControlsHandler(){
     right = RELEASE_MODE;
     lookLeft = RELEASE_MODE;
     lookRight = RELEASE_MODE;
-    player = new Player(QVector3D(10, 10, 50));
+    player = new Player(QVector3D(500, 88, 50));
     populateWalls(walls);
     QObject::connect(this, &ControlsHandler::collision,
                      player, &Player::collisionSlot);
