@@ -17,6 +17,8 @@ class Render
     scrPos center;
     Player *p;
     ControlsHandler *controls;
+    float FOV = 60.0f; // horizontal FOV
+    float VFOV = 155.0f; // vertical FOV
 
 public:
     Render(ControlsHandler *controls);
@@ -26,6 +28,8 @@ public:
     void paintWalls();
     void paint3DWalls();
     void paintFOVLimit();
+    float getFOV() const;
+    void setFOV(float value);
 };
 
 #endif // RENDER_H

@@ -47,9 +47,6 @@ public:
     QVector3D getOldPosition() const;
     void setOldPosition(const QVector3D &value);
 
-    float getFOV() const;
-    void setFOV(float value);
-
 public slots:
     void collisionSlot(const Wall *wall);
 };

@@ -11,7 +11,6 @@
 #include <QtOpenGL>
 #include <GL/gl.h>
 #include "render.h"
-#include "screenposition.h"
 #include "controlshandler.h"
 #include <QTimer>
 

@@ -26,6 +26,17 @@ Render::Render(ControlsHandler *controls)
     this->controls = controls;
 }
 
+
+float Render::getFOV() const
+{
+    return FOV;
+}
+
+void Render::setFOV(float value)
+{
+    FOV = value;
+}
+
 void Render::glVertex2fScaled(GLfloat x, GLfloat y, scrPos scrpos)
 {
     glVertex2f(x * scrpos.scale + scrpos.xOffset,
@@ -74,12 +85,13 @@ void Render::paint3DWalls()
 {
     QVector3D playerPos = p->getPosition();
     float playerOri = p->getOrientation();
-    float halfFOV = p->getFOV() / 2;
+    float halfFOV = FOV / 2;
+    float halfVFOV = VFOV / 2;
 
     Wall wall;
     foreach (wall, controls->getWalls()) {
         float distance = CollisionHandler::distanceToWall(p, &wall);
-        float color = 1 - distance / 255.0f;
+        float color = 1 - distance / 655.0f;
 
         if (!wall.getVisible())
             continue;
@@ -91,10 +103,11 @@ void Render::paint3DWalls()
             float deltax = v[i].x() - playerPos.x();
             float deltay = v[i].y() - playerPos.y();
             float deltaz = v[i].z() - playerPos.z();
+            float deltaxy = qSqrt(deltax * deltax + deltay * deltay);
             float absoluteAngle = qRadiansToDegrees(qAtan2(deltay, deltax));
-            float absoluteAngleVert = qRadiansToDegrees(qAtan2(deltaz, deltay));
+            float absoluteAngleVert = qRadiansToDegrees(qAtan2(deltaz,deltaxy));
             float relativeAngle = absoluteAngle - playerOri;
-            glVertex2f(-relativeAngle / halfFOV, absoluteAngleVert / 150.0f);
+            glVertex2f(-relativeAngle / halfFOV, absoluteAngleVert / halfVFOV);
         }
 
         glEnd();
@@ -106,7 +119,7 @@ void Render::paint3DWalls()
 void Render::paintFOVLimit()
 {
     glColor3f(1.0f, 0.0f, 0.0f);
-    float halfFOV = p->getFOV()/2;
+    float halfFOV = FOV/2;
     float ploriRad = qDegreesToRadians(p->getOrientation());
     float leftHalfCos = 0.5f * qCos(ploriRad - qDegreesToRadians(halfFOV));
     float leftHalfSin = 0.5f * qSin(ploriRad - qDegreesToRadians(halfFOV));

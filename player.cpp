@@ -10,16 +10,6 @@ void Player::setOldPosition(const QVector3D &value)
     oldPosition = value;
 }
 
-float Player::getFOV() const
-{
-    return FOV;
-}
-
-void Player::setFOV(float value)
-{
-    FOV = value;
-}
-
 Player::Player(QVector3D position)
 {
     this->position = position;
