@@ -8,6 +8,9 @@
 #include "controlshandler.h"
 #include "player.h"
 
+#define SCREEN_WIDTH 768
+#define SCREEN_HEIGHT 768
+
 class Render
 {
     scrPos upperLeft;
@@ -22,7 +25,6 @@ class Render
 
 public:
     Render(ControlsHandler *controls);
-    void glVertex2fScaled(GLfloat x, GLfloat y, scrPos scrpos);
     void paintCentralCircle();
     void paintInfo();
     void paintWalls();

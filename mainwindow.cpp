@@ -54,12 +54,15 @@ void MainWindow::paintGL()
     glClear(GL_COLOR_BUFFER_BIT);
 
     render->paint3DWalls();
+
+    glViewport(3 * width() / 4, 3 * height() / 4, width() / 4, height() / 4);
     glBegin(GL_LINES);
 
     render->paintFOVLimit();
     render->paintWalls();
-
     render->paintCentralCircle();
+
+
     paintInfo(p);
     glEnd();
 

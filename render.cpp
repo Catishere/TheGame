@@ -37,12 +37,6 @@ void Render::setFOV(float value)
     FOV = value;
 }
 
-void Render::glVertex2fScaled(GLfloat x, GLfloat y, scrPos scrpos)
-{
-    glVertex2f(x * scrpos.scale + scrpos.xOffset,
-               y * scrpos.scale + scrpos.yOffset);
-}
-
 void Render::paintCentralCircle()
 {
     glBegin(GL_LINE_LOOP);
@@ -51,7 +45,7 @@ void Render::paintCentralCircle()
              double angle = 2 * M_PI * i / 300;
              double x = qCos(angle)/ 200;
              double y = qSin(angle)/ 200;
-             glVertex2fScaled(x, y, upperRight);
+             glVertex2f(x, y);
          }
     glEnd();
 }
@@ -76,8 +70,8 @@ void Render::paintWalls()
         float p2x = p2xdelta / 200;
         float p2y = p2ydelta / 200;
 
-        glVertex2fScaled(p1x, p1y, upperRight);
-        glVertex2fScaled(p2x, p2y, upperRight);
+        glVertex2f(p1x, p1y);
+        glVertex2f(p2x, p2y);
     }
 }
 
@@ -114,7 +108,6 @@ void Render::paint3DWalls()
         glEnd();
         glColor3f(1, 1, 1);
     }
-
 }
 
 void Render::paintFOVLimit()
@@ -128,14 +121,14 @@ void Render::paintFOVLimit()
     float rightHalfCos = 0.5f * qCos(ploriRad + qDegreesToRadians(halfFOV));
     float rightHalfSin = 0.5f * qSin(ploriRad + qDegreesToRadians(halfFOV));
 
-    glVertex2fScaled(0.0, 0.0, upperRight);
-    glVertex2fScaled(leftHalfCos, leftHalfSin, upperRight);
+    glVertex2f(0.0, 0.0);
+    glVertex2f(leftHalfCos, leftHalfSin);
 
-    glVertex2fScaled(leftHalfCos, leftHalfSin, upperRight);
-    glVertex2fScaled(rightHalfCos, rightHalfSin, upperRight);
+    glVertex2f(leftHalfCos, leftHalfSin);
+    glVertex2f(rightHalfCos, rightHalfSin);
 
-    glVertex2fScaled(rightHalfCos, rightHalfSin, upperRight);
-    glVertex2fScaled(0.0, 0.0, upperRight);
+    glVertex2f(rightHalfCos, rightHalfSin);
+    glVertex2f(0.0, 0.0);
     glColor3f(1, 1, 1);
 }
 

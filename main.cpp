@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
     MainWindow w;
 
     w.setTitle("The Game");
-    w.resize(SCREEN_WIDTH, SCREEN_HIGHT);
+    w.resize(SCREEN_WIDTH, SCREEN_HEIGHT);
     w.show();
     return a.exec();
 }
